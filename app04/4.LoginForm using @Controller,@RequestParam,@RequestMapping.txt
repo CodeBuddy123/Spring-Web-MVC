@@ -1,0 +1,158 @@
+index.jsp
+--------------
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<jsp:forward page="loginform"/>
+</body>
+</html>
+--------------------------------------------------------------------------------------------
+loginform.jsp
+----------------------
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<h2 style='color:blue' align='center'>ASHISH SOFTWARE SOLUTIONS</h2>
+<h3 style='color:brown' align='center'>Login Page</h3>
+<form action="./login" method="post">
+<center>
+<table align='center'>
+<tr>
+	<td>User Name</td>
+	<td><input type="text" name="uname"></td>
+</tr>
+<tr>
+	<td>User Password</td>
+	<td><input type="password" name="upwd"></td>
+</tr>
+<tr>
+	<td><input type="submit" value="Login"></td>
+</tr>
+</table>
+</center>
+</form>
+</body>
+</html>
+--------------------------------------------------------------------------------------------
+success.jsp
+---------------
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<h2 style="color:brown" align="center">Ashish Software Solutions</h2>
+<h1 style="color:green" align="center">
+Login Status:${status}
+</h1>
+</body>
+</html>
+-------------------------------------------------------------------------------------------
+failure.jsp
+-------------
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<h2 style="color:brown" align="center">Ashish Software Solutions</h2>
+<h1 style="color:red" align="center">
+Login Status:${status}
+</h1>
+</body>
+</html>
+---------------------------------------------------------------------------------------------LoginController.java
+----------------------------
+package com.ashsoft.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
+
+@Controller
+public class LoginController {
+	
+	@RequestMapping("/loginform")
+	public String loginform()
+	{
+		
+		return "loginform"; //view logical name
+	}
+	
+	@RequestMapping(value ="/login" ,method =RequestMethod.POST)
+	public String login(@RequestParam("uname") String uname,String upwd,ModelMap map)
+	{
+		String status="";
+		
+		if(uname.equals("ashish") && upwd.equals("ashish"))
+		{
+			status="success";
+		}
+		else
+		{
+			status="failure";
+		}
+		map.addAttribute("status",status); //model object
+		return status;
+	}
+}
+------------------------------------------------------------------------------------------
+ds-servlet.xml
+--------------------
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context" 
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans 
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context.xsd">
+	<context:component-scan base-package="com.ashsoft.controller"/> <!-- Activates Annotations -->
+	<bean name="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/"/>
+		<property name="suffix" value=".jsp"/>
+	</bean>
+</beans>
+--------------------------------------------------------------------------------------------
+web.xml
+-------------
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" id="WebApp_ID" version="2.5">
+  <display-name>app04</display-name>
+  <welcome-file-list>
+    <welcome-file>index.jsp</welcome-file>
+  </welcome-file-list>
+  <servlet>
+  	<servlet-name>ds</servlet-name>
+  	<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+  	<load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>ds</servlet-name>
+  	<url-pattern>/</url-pattern>
+  </servlet-mapping>
+</web-app>
