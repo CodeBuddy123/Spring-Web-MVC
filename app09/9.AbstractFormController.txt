@@ -1,0 +1,187 @@
+index.jsp
+----------------
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<jsp:forward page="reg"/> <!-- Request goes to StudentController -->
+</body>
+</html>
+-------------------------------------------------------------------------------------------------------
+registrationform.jsp
+-----------------------------
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<h2 style="color: red;" align="center">Ashish Software Solutions</h2>
+<h3 style="color: green;" align="center">Student Registration Page</h3>
+<form action="reg" method="post">
+<center>
+<table>
+<tr>
+	<td>Student ID</td>
+	<td><input type="text" name="sid"/></td>
+</tr>
+<tr>
+	<td>Student Name</td>
+	<td><input type="text" name="sname"/></td>
+</tr>
+<tr>
+	<td>Student Email</td>
+	<td><input type="text" name="semail"/></td>
+</tr>
+<tr>
+	<td>Student Mobile</td>
+	<td><input type="text" name="smobile"/></td>
+</tr>
+<tr>
+	<td><input type="submit" value="Register"/></td>
+</tr>
+</table>
+</center>
+</form>
+</body>
+</html>
+----------------------------------------------------------------------------------------------------------
+registrationdetails.jsp
+--------------------------------
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<h2 style="color: red;" align="center">Ashish Software Solutions</h2>
+<h3 style="color: green;" align="center">Student Registration Details</h3>
+<center>
+<table border='1' bgcolor='lightblue'>
+<tr>
+	<td>Student ID</td>
+	<td>${std.sid}</td>
+</tr>
+<tr>
+	<td>Student Name</td>
+	<td>${std.sname}</td>
+</tr>
+<tr>
+	<td>Student Email</td>
+	<td>${std.semail}</td>
+</tr>
+<tr>
+	<td>Student Mobile</td>
+	<td>${std.smobile}</td>
+</tr>
+</table>
+</center>
+</body>
+</html>
+-----------------------------------------------------------------------------------------------------------
+Student.java
+------------------
+//This is command class,form data stored in its object
+package com.ashsoft.command;
+
+public class Student {
+	private String sid;
+	private String sname;
+	private String semail;
+	private String smobile;
+	public String getSid() {
+		return sid;
+	}
+	public void setSid(String sid) {
+		this.sid = sid;
+	}
+	public String getSname() {
+		return sname;
+	}
+	public void setSname(String sname) {
+		this.sname = sname;
+	}
+	public String getSemail() {
+		return semail;
+	}
+	public void setSemail(String semail) {
+		this.semail = semail;
+	}
+	public String getSmobile() {
+		return smobile;
+	}
+	public void setSmobile(String smobile) {
+		this.smobile = smobile;
+	}
+	
+}
+-------------------------------------------------------------------------------------------------------
+StudentController.java
+---------------------------------
+package com.ashsoft.controller;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.validation.BindException;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.AbstractFormController;
+
+import com.ashsoft.command.Student;
+
+public class StudentController extends AbstractFormController {
+
+	public StudentController() {
+		setCommandClass(Student.class);
+		setCommandName("student");
+		setSessionForm(true);
+		
+		
+	}
+	@Override
+	protected ModelAndView processFormSubmission(HttpServletRequest request, HttpServletResponse response, Object command, //this method is responsible for processing,after form data gets submitted
+			BindException arg3) throws Exception {
+		Student student=(Student)command;
+	
+		return new ModelAndView("registrationDetails", "std", student); //making student object available in registrationDetails page
+	}
+
+	@Override
+	protected ModelAndView showForm(HttpServletRequest request, HttpServletResponse response, BindException e) //this method is responsible for generating form
+			throws Exception {
+		
+		return new ModelAndView("registrationform");  //shows the form to the user
+	}
+
+}
+-----------------------------------------------------------------------------------------------------------
+ds-servlet.xml
+----------------------
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context" 
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans 
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context.xsd">
+	
+	<bean name="/reg" class="com.ashsoft.controller.StudentController"/>
+	<bean name="handlerMapping" class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping"/>
+	<bean name="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/"/>
+		<property name="suffix" value=".jsp"/>
+	</bean>
+</beans>
