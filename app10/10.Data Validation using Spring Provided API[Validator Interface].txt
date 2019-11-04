@@ -1,0 +1,307 @@
+web.xml
+-------------
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd" id="WebApp_ID" version="4.0">
+  <display-name>app10</display-name>
+  <welcome-file-list>
+    <welcome-file>index.jsp</welcome-file>
+  </welcome-file-list>
+  <servlet>
+  	<servlet-name>ds</servlet-name>
+  	<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+  	<load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>ds</servlet-name>
+  	<url-pattern>/</url-pattern>
+  </servlet-mapping>
+</web-app>
+---------------------------------------------------------------------------------------------------------
+index.jsp
+--------------
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<jsp:forward page="reg"/>
+</body>
+</html>
+---------------------------------------------------------------------------------------------------------
+registrationform.jsp
+----------------------------
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+ <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Insert title here</title>
+<style type="text/css">
+.error{
+	color:red;
+	font-family:consolas;
+	font-style:italic;
+	font-weight: bold;
+	font-size: large;
+}
+</style>
+</head>
+<body>
+<h2 style="color:red" align="center">Ashish Software Solutions</h2>
+<h3 style="color:blue" align="center">User Registration Page</h3>
+<form:form action="reg" method="POST" commandName="user">
+<center>
+<table>
+<tr>
+	<td>User Name</td>
+	<td><form:input path="uname"/>
+	<td><form:errors path="uname" cssClass="error"/>
+</tr>
+<tr>
+	<td>Password</td>
+	<td><form:password path="upwd"/>
+	<td><form:errors path="upwd" cssClass="error"/>
+</tr>
+<tr>
+	<td>User Age</td>
+	<td><form:input path="uage"/>
+	<td><form:errors path="uage" cssClass="error"/>
+</tr>
+<tr>
+	<td>User Email</td>
+	<td><form:input path="uemail"/>
+	<td><form:errors path="uemail" cssClass="error"/>
+</tr>
+<tr>
+	<td>User Mobile</td>
+	<td><form:input path="umobile"/>
+	<td><form:errors path="umobile" cssClass="error"/>
+</tr>
+<tr>
+	<td><input type="submit" value="Register"/></td>
+</tr>
+</table>
+</center>
+</form:form>
+</body>
+</html>
+------------------------------------------------------------------------------------------------------
+User.java
+--------------
+package com.ashsoft.command;
+
+public class User {
+	private String uname;
+	private String upwd;
+	private int uage;
+	private String uemail;
+	private String umobile;
+	public String getUname() {
+		return uname;
+	}
+	public void setUname(String uname) {
+		this.uname = uname;
+	}
+	public String getUpwd() {
+		return upwd;
+	}
+	public void setUpwd(String upwd) {
+		this.upwd = upwd;
+	}
+	public int getUage() {
+		return uage;
+	}
+	public void setUage(int uage) {
+		this.uage = uage;
+	}
+	public String getUemail() {
+		return uemail;
+	}
+	public void setUemail(String uemail) {
+		this.uemail = uemail;
+	}
+	public String getUmobile() {
+		return umobile;
+	}
+	public void setUmobile(String umobile) {
+		this.umobile = umobile;
+	}
+	
+}
+-----------------------------------------------------------------------------------------------------------
+UserController.java
+----------------------------
+package com.ashsoft.controller;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.validation.BindException;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.SimpleFormController;
+
+import com.ashsoft.command.User;
+
+public class UserController extends SimpleFormController {
+
+   @Override
+protected ModelAndView onSubmit(HttpServletRequest request, HttpServletResponse response, Object command,
+		BindException errors) throws Exception {
+	User user=(User)command;
+	return  new ModelAndView("registrationdetails","user",user);
+}
+   
+}
+------------------------------------------------------------------------------------------------------
+registrationdetails.jsp
+-------------------------------
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<h2 style="color:red" align="center">Ashish Software Solutions</h2>
+<h1 style="color:blue" align="center">Registration Details</h1>
+<center>
+<table border='1' bgcolor='lightblue'>
+<tr>
+	<td>User Name</td>
+	<td>${user.uname }</td>
+</tr>
+<tr>
+	<td>Password</td>
+	<td>${user.upwd }</td>
+</tr>
+<tr>
+	<td>User Age</td>
+	<td>${user.uage }</td>
+</tr>
+<tr>
+	<td>User Email</td>
+	<td>${user.uemail }</td>
+</tr>
+<tr>
+	<td>User Mobile</td>
+	<td>${user.umobile }</td>
+</tr>
+</table>
+</center>
+</body>
+</html>
+------------------------------------------------------------------------------------------------------------
+UserValidator.java
+---------------------------
+package com.ashsoft.validator;
+
+
+import org.springframework.validation.Errors;
+import org.springframework.validation.ValidationUtils;
+import org.springframework.validation.Validator;
+
+import com.ashsoft.command.User;
+
+public class UserValidator implements Validator {
+
+		
+	@Override
+	public boolean supports(Class<?> cls) {
+		
+		return User.class.isAssignableFrom(cls); //returns true if User class exists for validation
+	}
+
+	@Override
+	public void validate(Object command, Errors errors) {
+		ValidationUtils.rejectIfEmpty(errors,"uname", "uname.required"); //errors,var_name,key inside properties file
+		ValidationUtils.rejectIfEmpty(errors, "upwd", "upwd.required");
+		ValidationUtils.rejectIfEmpty(errors, "uage", "uage.required");        //Validation for empty data provided in form
+		ValidationUtils.rejectIfEmpty(errors, "uemail", "uemail.required");
+		ValidationUtils.rejectIfEmpty(errors, "umobile", "umobile.required");
+		
+		User user=(User)command;
+		
+		if(!user.getUpwd().equals("") && user.getUpwd().length()<5)
+		{
+			errors.rejectValue("upwd","upwd.minLength");
+		}
+		if(!user.getUpwd().equals("") && user.getUpwd().length()>10)
+		{
+			errors.rejectValue("upwd","upwd.maxLength");
+		}
+		if(user.getUage()<18 || user.getUage()>30)
+		{
+			errors.rejectValue("uage","uage.range");
+		}
+		if(!user.getUemail().equals("") && !user.getUemail().contains("@"))
+		{
+			errors.rejectValue("uemail","uemail.invalid");
+		}
+		if(!user.getUmobile().equals("") && !user.getUmobile().startsWith("91-"))
+		{
+			errors.rejectValue("umobile","umobile.invalid");
+		}
+	}
+
+}
+--------------------------------------------------------------------------------------------------------
+ds-servlet.xml
+---------------------
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context" 
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans 
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context.xsd">
+        
+	<!-- Properties file Configuration -->
+	<bean name="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+		<property name="basename" value="com/ashsoft/resources/error_Messages"/>
+	</bean>
+	
+	<!-- Validator Class Configuration -->
+	<bean name="userValidator" class="com.ashsoft.validator.UserValidator"/>
+	
+	<!-- Controller Class -->
+	<bean name="/reg" class="com.ashsoft.controller.UserController">
+		<property name="commandName" value="user"/>
+		<property name="commandClass" value="com.ashsoft.command.User"/>
+		<property name="formView" value="registrationform"/>
+		<property name="sessionForm" value="true"/>
+		<property name="validator" ref="userValidator"/>
+	</bean>
+	
+	<!-- HandlerMapping -->
+	<bean name="handlerMapping" class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping"/>
+	
+	<!-- View Resolver -->
+	<bean name="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/"/>
+		<property name="suffix" value=".jsp"/>
+	</bean>
+</beans>
+----------------------------------------------------------------------------------------------------------
+error_Messages.properties
+---------------------------------------
+uname.required = User Name is required.
+upwd.required = Password is required.
+uage.required = User Age is required.
+uemail.required = User Email is required.
+umobile.required = User Mobile is required.
+
+upwd.minLength = User password must be minimum 5 characters.
+upwd.maxLength = User password must be maximum 10 characters.
+uage.range = User Age must be in range 18 to 30.
+uemail.invalid = User Email is invalid.
+umobile.invalid = User Mobile is invalid.
