@@ -1,5 +1,5 @@
 
-Note:-All with Spring JARS we require additional JARS :-
+Note:-Along with Spring JARS we require additional JARS :-
 1)classmate-version.jar
 2)jboss-logging-version.jar
 3)hibernate-validator-version.jar
