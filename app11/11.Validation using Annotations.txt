@@ -1,0 +1,303 @@
+
+Note:-All with Spring JARS we require additional JARS :-
+1)classmate-version.jar
+2)jboss-logging-version.jar
+3)hibernate-validator-version.jar
+4)validation-api-version.jar
+-----------------------------------------------------------------------------------------------------
+web.xml
+-------------
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd" id="WebApp_ID" version="4.0">
+  <display-name>app11</display-name>
+  <welcome-file-list>
+    <welcome-file>index.jsp</welcome-file>
+  </welcome-file-list>
+  <servlet>
+  	<servlet-name>ds</servlet-name>
+  	<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+  	<load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+   <servlet-name>ds</servlet-name>
+    <url-pattern>/</url-pattern>	
+  </servlet-mapping>
+</web-app>
+---------------------------------------------------------------------------------------------------------
+index.jsp
+-------------
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<jsp:forward page="reg"/>
+</body>
+</html>
+--------------------------------------------------------------------------------------------------------
+registrationform.jsp
+----------------------------
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+ <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<h2 style="color:green" align="center">Ashish Software Solutions</h2>
+<h3 style="color:purple" align="center">Registration Form</h3>
+<form:form action="reg" method="POST" commandName="user">
+<center>
+<table>
+<tr>
+	<td>User Name</td>
+	<td><form:input path="uname"/>
+	<td><form:errors path="uname"cssClass="error"/>
+	
+</tr>
+<tr>
+	<td>Password</td>
+	<td><form:password path="upwd"/>
+	<td><form:errors path="upwd"cssClass="error"/>
+</tr>
+<tr>
+	<td>User Age</td>
+	<td><form:input path="uage"/>
+	<td><form:errors path="uage"cssClass="error"/>
+
+</tr>
+<tr>
+	<td>User Date of Birth</td>
+	<td><form:input path="udob"/>
+	<td><form:errors path="udob"  cssClass="error"/>
+</tr>
+<tr>
+	<td>User Email</td>
+	<td><form:input path="uemail"/>
+	<td><form:errors path="uemail"cssClass="error"/>
+</tr>
+<tr>
+	<td>User Mobile</td>
+	<td><form:input path="umobile"/>
+	<td><form:errors path="umobile"cssClass="error"/>
+</tr>
+<tr>
+	<td><input type="submit" value="Register"/></td>
+</tr>
+</table>
+</center>
+</form:form>
+</body>
+</html>
+-----------------------------------------------------------------------------------------------------
+UserController.java
+----------------------------
+package com.ashsoft.controller;
+
+
+
+import javax.validation.Valid;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.ashsoft.command.User;
+
+@Controller
+@RequestMapping("/reg")
+public class UserController {
+  
+    @RequestMapping(method=RequestMethod.GET)  //showForm is executed for GET Request type
+	public String showForm(Model model)
+	{
+		model.addAttribute("user",new User());
+		return "registrationform";
+	}
+    
+    @RequestMapping(method=RequestMethod.POST)//registration form is executed for POST request type
+    public ModelAndView registration(@Valid User user,BindingResult errors,Model model)
+    {
+    	if(errors.hasErrors()) //if any errors exists in form submission
+    	{
+    		return new ModelAndView("registrationform","user",user);//forwarding request back to registration form
+    	}
+    	else
+    	{
+    		return new ModelAndView("registrationdetails","user",user);//forwarding request to registrationdetails page with user model object
+    	}
+    }
+}
+--------------------------------------------------------------------------------------------------------
+ds-servlet.xml
+---------------------
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context" 
+     xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans 
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+	
+	<context:component-scan base-package="com.ashsoft"/><!-- Activates Core level Annotations -->
+	<mvc:annotation-driven/> <!-- Activates MCV related Annotations -->
+	<bean name="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+		<property name="basename" value="com/ashsoft/resources/error_Messages"/>
+	</bean>
+	<!-- HandlerMapping -->
+	<bean name="handlerMapping" class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping"/>
+	
+	<!-- View Resolver -->
+	<bean name="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/"/>
+		<property name="suffix" value=".jsp"/>
+	</bean>
+</beans>
+-------------------------------------------------------------------------------------------------------
+registrationdetails.jsp
+--------------------------------
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<h2 style="color:green" align="center">Ashish Software Solutions</h2>
+<h1 style="color:purple" align="center">Registration Details</h1>
+<center>
+<table border='1' bgcolor='lightyellow'>
+<tr>
+	<td>User Name</td>
+	<td>${user.uname}</td>
+</tr>
+<tr>
+	<td>Password</td>
+	<td>${user.upwd}</td>
+</tr>
+<tr>
+	<td>User Age</td>
+	<td>${user.uage}</td>
+</tr>
+<tr>
+	<td>User Date of Birth</td>
+	<td>${user.udob}</td>
+</tr>
+<tr>
+	<td>User Email</td>
+	<td>${user.uemail}</td>
+</tr>
+<tr>
+	<td>User Mobile</td>
+	<td>${user.umobile}</td>
+</tr>
+</table>
+</center>
+</body>
+</html>
+------------------------------------------------------------------------------------------------------
+User.java  Validation and corresponding messages inside a bean
+-------------
+package com.ashsoft.command;
+
+import java.util.Date;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.Range;
+import org.springframework.format.annotation.DateTimeFormat;
+
+
+
+
+public class User {
+	@NotEmpty(message = "User Name is Required")
+	private String uname;
+	
+    @NotEmpty(message = "User Password is Required")
+    @Size(min = 6,max = 10, message = "User Password must be minimum 6 characters and maximum 10 characters")
+	private String upwd;
+	
+    @NotNull(message = "User Age is Required")
+    @Range(min = 18,max = 25,message = "User Age range is between 18 to 25")
+	private int uage;
+	
+	@NotNull(message = "User Date of Birth is Required")
+	@DateTimeFormat(pattern = "dd/mm/yyyy")
+	@Past(message = "User Date of Birth must be Past date")
+	private Date udob;
+	
+	@NotEmpty(message = "User Email is Required")
+	@Email
+	private String uemail;
+	
+	@NotEmpty(message = "User Mobile no is Required")
+	@Pattern(regexp = "91-[0-9] {10}",message = "User Mobile must be 91-DDDDDDDDDD format")
+	private String umobile;
+	
+	public String getUname() {
+		return uname;
+	}
+	public void setUname(String uname) {
+		this.uname = uname;
+	}
+	public String getUpwd() {
+		return upwd;
+	}
+	public void setUpwd(String upwd) {
+		this.upwd = upwd;
+	}
+	public int getUage() {
+		return uage;
+	}
+	public void setUage(int uage) {
+		this.uage = uage;
+	}
+	public Date getUdob() {
+		return udob;
+	}
+	public void setUdob(Date udob) {
+		this.udob = udob;
+	}
+	public String getUemail() {
+		return uemail;
+	}
+	public void setUemail(String uemail) {
+		this.uemail = uemail;
+	}
+	public String getUmobile() {
+		return umobile;
+	}
+	public void setUmobile(String umobile) {
+		this.umobile = umobile;
+	}
+	
+}
+----------------------------------------------------------------------------------------------------
+error_Messages.properties [Validation message for Date of birth]
+----------------------------------------------------------------------------------------------
+
+typeMismatch = {0} is in invalid format.
