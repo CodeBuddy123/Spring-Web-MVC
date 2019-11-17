@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context" 
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans 
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context.xsd">
+     
+     <!-- BeanNameUrlHandlerMapping 
+    <bean name="/helloform" class="com.ashsoft.controller.HelloFormController"/>
+    <bean name="/wish" class="com.ashsoft.controller.WishController"/>
+      
+	<bean name="handlerMapping" class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping"/>
+	-->
+	
+	<!-- SimpleUrlHandlerMapping 
+	<bean name="helloFormController" class="com.ashsoft.controller.HelloFormController"/>
+	<bean name="wishController" class="com.ashsoft.controller.WishController"/>
+	
+	<bean name="handlerMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+		<property name="mappings">
+		<props>
+			<prop key="/helloform">helloFormController</prop>
+			<prop key="/wish">wishController</prop>
+		</props>
+		</property>
+	</bean>
+	-->
+	<!-- ControllerClassNameHandlerMapping -->
+	<bean class="com.ashsoft.controller.HelloFormController"/>
+	<bean class="com.ashsoft.controller.WishController"/>
+	
+	<bean name="handlerMapping" class="org.springframework.web.servlet.mvc.support.ControllerClassNameHandlerMapping"/>
+	
+	<!-- View Resolver -->
+	<bean name="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/"/>
+		<property name="suffix" value=".jsp"/>
+	</bean>
+</beans>

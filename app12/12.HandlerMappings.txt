@@ -1,0 +1,172 @@
+
+BeanNameUrlHandlerMapping
+SimpleUrlHandlerMapping
+ControllerClassNameHandlerMapping
+----------------------------------------------------------
+web.xml
+-------------
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd" id="WebApp_ID" version="4.0">
+  <display-name>app12</display-name>
+  <welcome-file-list>
+    <welcome-file>index.jsp</welcome-file>  
+  </welcome-file-list>
+  <servlet>
+  	<servlet-name>ds</servlet-name>
+  	<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+  	<load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>ds</servlet-name>
+  	<url-pattern>/</url-pattern>
+  </servlet-mapping>
+</web-app>
+------------------------------------------------------------------------------------------------------
+index.jsp
+-------------
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<jsp:forward page="helloform"/>
+</body>
+</html>
+-----------------------------------------------------------------------------------------------------
+helloform.jsp
+------------------
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<h2 style="color:red" align="center">Ashish Software Solutions</h2>
+<h3 style="color:blue" align="center">Hello Form</h3>
+<center>
+<form action="wish" method="POST">
+<table>
+<tr>
+	<td>Your Name</td>
+	<td><input type="text" name="uname"/></td>
+</tr>
+<tr>
+	<td><input type="submit" value="Wish"/></td>
+</tr>
+</table>
+</form>
+</center>
+</body>
+</html>
+-----------------------------------------------------------------------------------------------------
+wish.jsp
+-----------
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<h2 style="color:red" align="center">Ashish Software Solutions</h2>
+<h3 style="color:blue" align="center">Wish Page</h3>
+<h1 style="color:green" align="center">
+Hello ${uname}, Good Morning!
+</h1>
+</body>
+</html>
+-------------------------------------------------------------------------------------------------------
+HelloFormController.java
+-------------------------------------
+package com.ashsoft.controller;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.Controller;
+
+public class HelloFormController implements Controller {
+	
+   @Override
+ public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	   
+	 return  new ModelAndView("helloform");
+	 
+   }
+}
+-----------------------------------------------------------------------------------------------------
+WishController.java
+------------------------------
+package com.ashsoft.controller;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.Controller;
+
+public class WishController implements Controller {
+
+	@Override
+	public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse arg1) throws Exception {
+		String uname=request.getParameter("uname");
+		
+		return new ModelAndView("wish", "uname", uname);
+	}
+
+}
+-----------------------------------------------------------------------------------------------------
+ds-servlet.xml
+---------------------
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context" 
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans 
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context.xsd">
+     
+     <!-- BeanNameUrlHandlerMapping 
+    <bean name="/helloform" class="com.ashsoft.controller.HelloFormController"/>
+    <bean name="/wish" class="com.ashsoft.controller.WishController"/>
+      
+	<bean name="handlerMapping" class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping"/>
+	-->
+	
+	<!-- SimpleUrlHandlerMapping 
+	<bean name="helloFormController" class="com.ashsoft.controller.HelloFormController"/>
+	<bean name="wishController" class="com.ashsoft.controller.WishController"/>
+	
+	<bean name="handlerMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+		<property name="mappings">
+		<props>
+			<prop key="/helloform">helloFormController</prop>
+			<prop key="/wish">wishController</prop>
+		</props>
+		</property>
+	</bean>
+	-->
+	<!-- ControllerClassNameHandlerMapping -->
+	<bean class="com.ashsoft.controller.HelloFormController"/>
+	<bean class="com.ashsoft.controller.WishController"/>
+	
+	<bean name="handlerMapping" class="org.springframework.web.servlet.mvc.support.ControllerClassNameHandlerMapping"/>
+	
+	<!-- View Resolver -->
+	<bean name="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/"/>
+		<property name="suffix" value=".jsp"/>
+	</bean>
+</beans>
