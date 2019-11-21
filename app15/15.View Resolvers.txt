@@ -1,0 +1,187 @@
+
+Note:-Add tomcat JSTL Jars along with Spring Jars in WEB-INF/lib
+-----------------------------------------------------------------------------------------------
+web.xml
+--------------
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd" id="WebApp_ID" version="4.0">
+  <display-name>app15</display-name>
+  <welcome-file-list>
+    <welcome-file>index.jsp</welcome-file>  
+  </welcome-file-list>
+  <servlet>
+  	<servlet-name>ds</servlet-name>
+  	<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+  	<load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>ds</servlet-name>
+  	<url-pattern>/</url-pattern>
+  </servlet-mapping>
+</web-app>
+--------------------------------------------------------------------------------------------------
+index.jsp
+------------
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<jsp:forward page="helloform"/>
+</body>
+</html>
+-----------------------------------------------------------------------------------------------------
+helloform.jsp
+-------------------
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<h2 style="color:red" align="center">Ashish Software Solutions</h2>
+<h3 style="color:blue" align="center">Hello Form</h3>
+<center>
+<form action="wish" method="POST">
+<table>
+<tr>
+	<td>Your Name</td>
+	<td><input type="text" name="uname"/></td>
+</tr>
+<tr>
+	<td><input type="submit" value="Wish"/></td>
+</tr>
+</table>
+</form>
+</center>
+</body>
+</html>
+------------------------------------------------------------------------------------------------------
+wish.jsp
+-----------
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<h2 style="color:red" align="center">Ashish Software Solutions</h2>
+<h3 style="color:blue" align="center">Wish Page</h3>
+<h2 style="color:maroon" align="center">
+Hello ${uname}, Good Evening!
+</h2>
+</body>
+</html>
+-------------------------------------------------------------------------------------------------------
+UserController.java
+----------------------------
+package com.ashsoft.controller;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
+
+
+@Controller
+public class UserController {
+	
+	
+	@RequestMapping("/helloform")
+	public ModelAndView showForm()
+	{
+		return new ModelAndView("helloform");
+	}
+	
+	@RequestMapping("/wish")
+	public ModelAndView wish(HttpServletRequest request, HttpServletResponse response)
+	{
+		String uname=request.getParameter("uname");
+		
+		return new ModelAndView("wish","uname",uname);
+	}
+}
+
+--------------------------------------------------------------------------------------------------
+ds-servlet.xml
+----------------------
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context" 
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans 
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context.xsd">
+     
+     <context:component-scan base-package="com.ashsoft"/>
+     
+	<!-- Controller class, HandlerMapping Config not Required as Annotations are provided -->
+		
+	<!-- UrlBasedViewResolver 
+	<bean name="viewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+		<property name="prefix" value="/WEB-INF/"/>
+		<property name="suffix" value=".jsp"/>
+		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+	</bean>
+	-->
+	
+	<!-- InternalResourceViewResolver 
+		<bean name="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/"/>
+		<property name="suffix" value=".jsp"/>
+		</bean>
+	-->
+	
+	<!-- XmlViewResolver 
+		<bean name="viewResolver" class="org.springframework.web.servlet.view.XmlViewResolver">
+			<property name="location" value="/WEB-INF/views.xml"/>
+		</bean>
+	-->
+	
+	<!-- ResourceBundlerViewResolver -->
+	<bean name="viewResolver" class="org.springframework.web.servlet.view.ResourceBundleViewResolver">
+			<property name="basename" value="views"/>
+		</bean>
+</beans>
+-----------------------------------------------------------------------------------------------------
+views.xml[under WEB-INF]
+----------------------------------------
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context" 
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans 
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context.xsd">
+        
+        <bean name="helloform" class="org.springframework.web.servlet.view.JstlView">
+        	<property name="url" value="/WEB-INF/helloform.jsp"/>
+        </bean>
+        <bean name="wish" class="org.springframework.web.servlet.view.JstlView">
+        	<property name="url" value="/WEB-INF/wish.jsp"/>
+        </bean>
+ </beans>
+------------------------------------------------------------------------------------------------
+views.properties[under src]
+---------------------------------------
+helloform.(class)=org.springframework.web.servlet.view.JstlView
+helloform.url=/WEB-INF/helloform.jsp
+
+wish.(class)=org.springframework.web.servlet.view.JstlView
+wish.url=/WEB-INF/wish.jsp
