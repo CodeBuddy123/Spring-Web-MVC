@@ -1,0 +1,234 @@
+index.jsp
+-------------
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<jsp:forward page="marks"/>
+</body>
+</html>
+---------------------------------------------------------------------------------------------------
+marksform.jsp
+---------------------
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+ <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<h2 style="color:green" align="center">Ashish International School</h2>
+<h3 style="color:blue" align="center">Student Marks Form</h3>
+<form:form action="marks" method="POST" commandName="student">
+<center>
+<table>
+<tr>
+	<td>Student Name</td>
+	<td><form:input path="sname" /></td>
+</tr>
+<tr>
+	<td>Course</td>
+	<td><form:input path="scourse"/></td>
+</tr>
+<tr>
+	<td>Marks</td>
+	<td><form:input path="smarks"/></td>
+</tr>
+<tr>
+<td><input type="submit" value="Submit"/></td>
+</tr>
+</table>
+</center>
+</form:form>
+</body>
+</html>
+-----------------------------------------------------------------------------------------------------
+marksdetails.jsp
+-----------------------
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<h2 style="color:green" align="center">Ashish International School</h2>
+<h3 style="color:blue" align="center">Student Marks Details</h3>
+<center>
+<table border='1' bgcolor='lightblue'>
+<tr>
+	<td>Student Name</td>
+	<td>${student.sname}</td>
+</tr>
+<tr>
+	<td>Course Name</td>
+	<td>${student.scourse}</td>
+</tr>
+<tr>
+	<td>Course Marks</td>
+	<td>${student.smarks}</td>
+</tr>
+</table>
+</center>
+</body>
+</html>
+----------------------------------------------------------------------------------------------------
+Student.java
+-------------------
+package com.ashsoft.command;
+
+public class Student {
+	private String sname;
+	private String scourse;
+	private int smarks;
+	public String getSname() {
+		return sname;
+	}
+	public void setSname(String sname) {
+		this.sname = sname;
+	}
+	public String getScourse() {
+		return scourse;
+	}
+	public void setScourse(String scourse) {
+		this.scourse = scourse;
+	}
+	public int getSmarks() {
+		return smarks;
+	}
+	public void setSmarks(int smarks) {
+		this.smarks = smarks;
+	}
+}
+-----------------------------------------------------------------------------------------------------
+StudentController.java
+--------------------------------
+package com.ashsoft.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.ashsoft.command.Student;
+import com.ashsoft.exception.MarksOutOfBoundsException;
+
+@Controller
+@RequestMapping("/marks")
+public class StudentController {
+
+   
+	@RequestMapping(name = "/marks", method = RequestMethod.GET)
+	public ModelAndView showMarksForm()
+	{
+		return new ModelAndView("marksform","student", new Student());
+	}
+	@ExceptionHandler
+	@RequestMapping(name = "/marks", method=RequestMethod.POST)
+	public ModelAndView showMarksDetails(Student student)
+	{
+		if(student.getSmarks()<0 || student.getSmarks()>100)
+		{
+			throw new MarksOutOfBoundsException("Invalid Marks, Please Provide marks in the range 0 to 100.");
+		}
+		return new ModelAndView("marksdetails","student",student);
+	}
+}
+------------------------------------------------------------------------------------------------------
+error.jsp
+------------
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<h1 style="color:red;" align="center">
+${exception.exception_Message}
+</h1>
+</body>
+</html>
+---------------------------------------------------------------------------------------------------
+MarksOutOfBoundsException.java
+---------------------------------------------------
+package com.ashsoft.exception;
+
+public class MarksOutOfBoundsException extends RuntimeException {
+
+	private static final long serialVersionUID = 1L;
+    
+	String exception_Message;
+	
+	public MarksOutOfBoundsException(String exception_Message) {
+		this.exception_Message=exception_Message;
+	}
+	
+	public void setException_Message(String exception_Message) {
+		this.exception_Message = exception_Message;
+	}
+	
+	public String getException_Message() {
+		return exception_Message;
+	}
+}
+-------------------------------------------------------------------------------------------------
+ds-servlet.xml
+---------------------
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context" 
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans 
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context.xsd">
+        
+        <context:component-scan base-package="com.ashsoft"/>
+        <bean name="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+			<property name="prefix" value="/WEB-INF/"/>
+			<property name="suffix" value=".jsp"/>
+		</bean>
+		<!-- Exception Class Configuration -->
+	    <bean name="exceptionResolver" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+	    	<property name="exceptionMappings">
+	    	<props>
+	    		<prop key="com.ashsoft.exception.MarksOutOfBoundsException">
+	    		 error
+	    		</prop>
+	    	</props>
+	    	</property>
+	    </bean>
+ </beans>
+-----------------------------------------------------------------------------------------------------
+web.xml
+-------------
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd" id="WebApp_ID" version="4.0">
+  <display-name>app16</display-name>
+  <welcome-file-list>
+    <welcome-file>index.jsp</welcome-file>   
+  </welcome-file-list>
+  <servlet>
+  	<servlet-name>ds</servlet-name>
+  	<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class> 	
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>ds</servlet-name>
+  	<url-pattern>/</url-pattern>
+  </servlet-mapping>
+</web-app>
