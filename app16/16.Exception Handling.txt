@@ -125,17 +125,16 @@ import com.ashsoft.command.Student;
 import com.ashsoft.exception.MarksOutOfBoundsException;
 
 @Controller
-@RequestMapping("/marks")
 public class StudentController {
 
    
-	@RequestMapping(name = "/marks", method = RequestMethod.GET)
+	@RequestMapping(value = "/marks", method = RequestMethod.GET)
 	public ModelAndView showMarksForm()
 	{
 		return new ModelAndView("marksform","student", new Student());
 	}
 	@ExceptionHandler
-	@RequestMapping(name = "/marks", method=RequestMethod.POST)
+	@RequestMapping(value= "/marks", method=RequestMethod.POST)
 	public ModelAndView showMarksDetails(Student student)
 	{
 		if(student.getSmarks()<0 || student.getSmarks()>100)
