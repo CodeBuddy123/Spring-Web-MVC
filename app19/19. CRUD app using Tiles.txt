@@ -1,0 +1,693 @@
+JARS Needed
+-------------------
+Spring JARS
+Hibernate JARS
+Oracle Db JAR
+Apache tiles 2.2 JARS
+--------------------------------------------------------------------------------------------------------
+index.jsp
+-------------
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<jsp:forward page="welcome"/>
+</body>
+</html>
+--------------------------------------------------------------------------------------------------------
+layout.jsp
+---------------
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<%@taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<table height="550" width="100%">
+	<tr height="20%">
+		<td colspan="2" bgcolor="maroon" align="center">
+			<tiles:insertAttribute name="header"/>
+		</td>
+	</tr>
+	<tr height="65%">
+		<td width="20%" align="center" bgcolor="lightyellow">
+			<tiles:insertAttribute name="menu"/>
+		</td>
+		<td width="80%" align="center" bgcolor="lightblue">
+			<tiles:insertAttribute name="body"/>
+		</td>
+	</tr>
+	<tr height="15%">
+	<td colspan="2" align="center" bgcolor="blue">
+			<tiles:insertAttribute name="footer"/>
+		</td>
+	</tr>
+</table>
+</body>
+</html>
+-------------------------------------------------------------------------------------------------------
+header.jsp
+---------------
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<h1 style="color:white" align="center">
+ASHISH SOFTWARE SOLUTIONS
+</h1>
+</body>
+</html>
+-----------------------------------------------------------------------------------------------------
+menu.jsp
+-------------
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<h3 align="center">
+<a href="add">ADD STUDENT</a><br><br>
+<a href="search">SEARCH STUDENT</a><br><br>
+<a href="delete">DELETE STUDENT</a><br><br>
+</h3>
+</body>
+</html>
+------------------------------------------------------------------------------------------------------
+welcome.jsp
+------------------
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<h1 style="color:red">
+<marquee>
+Welcome to Ashish Software Solutions
+</marquee>
+</h1>
+</body>
+</html>
+-----------------------------------------------------------------------------------------------------
+footer.jsp
+-------------
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<h2 align="center" style="color:white">
+Ashishsoft Private LTD, 303, Diamond Square, NewYork
+</h2>
+</body>
+</html>
+-----------------------------------------------------------------------------------------------------
+addform.jsp
+-----------------
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<br><br><br>
+<form:form method="POST" commandName="student" action="add">
+<center>
+<table>
+<tr>
+	<td>Student ID</td>
+	<td><form:input path="sid"/>
+</tr>
+<tr>
+	<td>Student Name</td>
+	<td><form:input path="sname"/>
+</tr>
+<tr>
+	<td>Student Address</td>
+	<td><form:input path="saddr"/>
+</tr>
+<tr>
+	<td><input type="submit" value="ADD"/>
+</tr>
+</table>
+</center>
+</form:form>
+</body>
+</html>
+----------------------------------------------------------------------------------------------------
+searchform.jsp
+---------------------
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+    <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<br><br><br>
+<form:form action="search" method="POST" commandName="student">
+<center>
+<table>
+<tr>
+	<td>Student ID</td>
+	<td><form:input path="sid"/>
+</tr>
+<tr>
+	<td><input type="submit" value="SEARCH"/>
+</tr>
+</table>
+</center>
+</form:form>
+</body>
+</html>
+--------------------------------------------------------------------------------------------------
+deleteform.jsp
+----------------------
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+    <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<br><br><br>
+<form:form action="delete" method="POST" commandName="student">
+<center>
+<table>
+<tr>
+	<td>Student ID</td>
+	<td><form:input path="sid"/>
+</tr>
+<tr>
+	<td><input type="submit" value="DELETE"/>
+</tr>
+</table>
+</center>
+</form:form>
+</body>
+</html>
+------------------------------------------------------------------------------------------------------
+status.jsp
+---------------
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<h1 style="color:red" align="center">
+${status}
+</h1>
+</body>
+</html>
+----------------------------------------------------------------------------------------------------
+studentdetails.jsp
+---------------------------
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<br><br>
+<center>
+<table border='1'>
+<tr>
+	<td>Student ID</td>
+	<td>${student.sid}</td>
+</tr>
+<tr>
+	<td>Student Name</td>
+	<td>${student.sname}</td>
+</tr>
+<tr>
+	<td>Student Address</td>
+	<td>${student.saddr}</td>
+</tr>
+</table>
+</center>
+</body>
+</html>
+--------------------------------------------------------------------------------------------------------
+tiles-defs.xml
+--------------------
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN" 
+"http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+<tiles-definitions>
+	<definition name="welcomeDef" template="/WEB-INF/layout.jsp">
+		<put-attribute name="header" value="/WEB-INF/header.jsp"/>
+		<put-attribute name="menu" value="/WEB-INF/menu.jsp"/>
+		<put-attribute name="body" value="/WEB-INF/welcome.jsp"/>
+		<put-attribute name="footer" value="/WEB-INF/footer.jsp"/>
+	</definition>
+	<definition name="addDef" extends="welcomeDef">
+		<put-attribute name="body" value="/WEB-INF/addform.jsp"/>
+	</definition>
+	<definition name="searchDef" extends="welcomeDef">
+		<put-attribute name="body" value="/WEB-INF/searchform.jsp"/>
+	</definition>
+	<definition name="deleteDef" extends="welcomeDef">
+		<put-attribute name="body" value="/WEB-INF/deleteform.jsp"/>
+	</definition>
+	<definition name="statusDef" extends="welcomeDef">
+		<put-attribute name="body" value="/WEB-INF/status.jsp"/>
+	</definition>
+	<definition name="studentDetailsDef" extends="welcomeDef">
+		<put-attribute name="body" value="/WEB-INF/studentdetails.jsp"/>
+	</definition>
+</tiles-definitions>
+----------------------------------------------------------------------------------------------------
+web.xml
+-------------
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd" id="WebApp_ID" version="4.0">
+  <display-name>app19</display-name>
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+  </welcome-file-list>
+  <servlet>
+  	<servlet-name>ds</servlet-name>
+  	<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+  	<load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>ds</servlet-name>
+  	<url-pattern>/</url-pattern>
+  </servlet-mapping>
+</web-app>
+----------------------------------------------------------------------------------------------------
+ds-servlet.xml
+---------------------
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans 
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd">
+       
+       <context:component-scan base-package="com.ashsoft"/>
+       <tx:annotation-driven transaction-manager="hibernateTransactionManager"/>
+      <bean name="viewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+      		<property name="viewClass" value="org.springframework.web.servlet.view.tiles2.TilesView"/>
+      		
+     </bean>
+      <bean name="tilesConfigurer" class="org.springframework.web.servlet.view.tiles2.TilesConfigurer">
+      	<property name="definitions">
+      		<list>
+      			<value>/WEB-INF/tiles-defs.xml</value>
+      		</list>
+      	</property>
+      </bean>
+     
+     <bean name="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+     	<property name="driverClassName" value="oracle.jdbc.OracleDriver"/>
+     	<property name="url" value="jdbc:oracle:thin:@localhost:1521:xe"/>
+     	<property name="username" value="system"/>
+     	<property name="password" value="ashish"/>
+     </bean>
+     
+    <bean name="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+    	<property name="dataSource" ref="dataSource"/>
+    	<property name="annotatedClasses">
+    		<list>
+    			<value>com.ashsoft.entity.StudentEntity</value>
+    		</list>
+    	</property>
+    	<property name="hibernateProperties">
+    		<props>
+    			<prop key="hibernate.dialect">org.hibernate.dialect.Oracle10gDialect</prop>
+    			<prop key="show_sql">true</prop>
+    		</props>
+    	</property>
+    </bean>
+    
+    <bean name="hibernateTransactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+    	<property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    
+    <bean name="hibernateTemplate" class="org.springframework.orm.hibernate4.HibernateTemplate">
+    	<property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+</beans>
+------------------------------------------------------------------------------------------------------
+StudentController.java
+---------------------------------
+package com.ashsoft.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.ashsoft.command.Student;
+import com.ashsoft.service.StudentService;
+
+@Controller
+public class StudentController {
+	
+    @Autowired
+	private StudentService studentService;
+    
+	@RequestMapping(value= "/welcome", method = RequestMethod.GET)
+	public String showWelcomePage()
+	{
+		return "welcomeDef";   //returning definitions instead of JSP
+	}
+	//==============ADD MODULE========
+	@RequestMapping( value="/add", method= RequestMethod.GET)
+	public ModelAndView showAddform()
+	{
+		return new ModelAndView("addDef","student",new Student());
+	}
+	@RequestMapping( value="/add", method= RequestMethod.POST)
+	public ModelAndView add(Student student)
+	{
+		String status="";
+		status=studentService.addStudent(student);
+		return new ModelAndView("statusDef","status",status);
+	}
+	
+	//==============SEARCH MODULE========
+	@RequestMapping( value="/search", method= RequestMethod.GET)
+	public ModelAndView showSearchform()
+	{
+		return new ModelAndView("searchDef","student",new Student());
+	}
+	@RequestMapping( value="/search", method= RequestMethod.POST)
+	public ModelAndView search(Student student)
+	{
+		ModelAndView modelAndView=null;
+		Student std= studentService.searchStudent(student.getSid());
+		if(std==null)
+		{
+			modelAndView=new ModelAndView("statusDef","status","Student not Existed");
+		}
+		else
+		{
+			modelAndView=new ModelAndView("studentDetailsDef","student",std);
+		}
+		return modelAndView;
+	}
+	//==============DELETE MODULE========
+	@RequestMapping( value="/delete", method= RequestMethod.GET)
+	public ModelAndView showDeleteform()
+	{
+		return new ModelAndView("deleteDef","student",new Student());
+	}
+	@RequestMapping( value="/delete", method= RequestMethod.POST)
+	public ModelAndView delete(Student student)
+	{
+		String status="";
+		status=studentService.deleteStudent(student.getSid());
+		return new ModelAndView("statusDef","status",status);
+	}
+}
+-----------------------------------------------------------------------------------------------------
+Student.java
+--------------------
+package com.ashsoft.command;
+
+public class Student {
+	private String sid;
+	private String sname;
+	private String saddr;
+	public String getSid() {
+		return sid;
+	}
+	public void setSid(String sid) {
+		this.sid = sid;
+	}
+	public String getSname() {
+		return sname;
+	}
+	public void setSname(String sname) {
+		this.sname = sname;
+	}
+	public String getSaddr() {
+		return saddr;
+	}
+	public void setSaddr(String saddr) {
+		this.saddr = saddr;
+	}
+	
+}
+-------------------------------------------------------------------------------------------------------
+StudentEntity.java
+-----------------------------
+package com.ashsoft.entity;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name ="student")
+public class StudentEntity {
+    @Id
+    @Column(name="SID")
+	private String sid;
+    
+    @Column(name="SNAME")
+	private String sname;
+    
+    @Column(name="SADDR")
+	private String saddr;
+    
+	public String getSid() {
+		return sid;
+	}
+	public void setSid(String sid) {
+		this.sid = sid;
+	}
+	public String getSname() {
+		return sname;
+	}
+	public void setSname(String sname) {
+		this.sname = sname;
+	}
+	public String getSaddr() {
+		return saddr;
+	}
+	public void setSaddr(String saddr) {
+		this.saddr = saddr;
+	}
+}
+------------------------------------------------------------------------------------------------------
+StudentService.java
+-----------------------------
+package com.ashsoft.service;
+
+import com.ashsoft.command.Student;
+
+public interface StudentService {
+	public String addStudent(Student std);
+	public Student searchStudent(String sid);
+	public String deleteStudent(String sid);
+}
+
+------------------------------------------------------------------------------------------------------
+StudentServiceImpl.java
+------------------------------------
+package com.ashsoft.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.ashsoft.command.Student;
+import com.ashsoft.dao.StudentDao;
+import com.ashsoft.entity.StudentEntity;
+
+@Service("studentService")
+public class StudentServiceImpl implements StudentService {
+    
+	@Autowired
+	private StudentDao studentDao;
+	
+	@Transactional
+	@Override
+	public String addStudent(Student std) {
+		
+		StudentEntity studentEntity= new StudentEntity();
+		studentEntity.setSid(std.getSid());
+		studentEntity.setSname(std.getSname()); //transferring data  from spring web mvc student object to ORM studententity object
+		studentEntity.setSaddr(std.getSaddr());
+		
+		String status=studentDao.add(studentEntity);
+		return status;
+	}
+
+	@Override
+	public Student searchStudent(String sid) {
+		StudentEntity studentEntity=studentDao.search(sid);
+		Student student=null;
+		if(studentEntity==null)
+		{
+			student=null;
+		}
+		else
+		{
+			student= new Student();
+			student.setSid(studentEntity.getSid());
+			student.setSname(studentEntity.getSname());
+			student.setSaddr(studentEntity.getSaddr());
+		}
+		return student;
+	}
+	@Transactional
+	@Override
+	public String deleteStudent(String sid) {
+		String status=studentDao.delete(sid);
+		return status;
+	}
+
+}
+---------------------------------------------------------------------------------------------------
+StudentDao.java
+------------------------
+package com.ashsoft.dao;
+
+import com.ashsoft.entity.StudentEntity;
+
+public interface StudentDao {
+	public String add(StudentEntity studentEntity);
+	public StudentEntity search(String sid);
+	public String delete(String sid);
+
+}
+
+---------------------------------------------------------------------------------------------------
+StudentDaoImpl.java
+--------------------------------
+package com.ashsoft.dao;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.hibernate4.HibernateTemplate;
+import org.springframework.stereotype.Repository;
+
+
+import com.ashsoft.entity.StudentEntity;
+
+@Repository("studentDao")
+public class StudentDaoImpl implements StudentDao {
+	
+
+    @Autowired
+	private HibernateTemplate hibernateTemplate;
+    
+	@Override
+	public String add(StudentEntity studentEntity) {
+		String status="";
+		try {
+			StudentEntity stdEntity=search(studentEntity.getSid());
+			if(stdEntity==null)
+			{
+				String pk_Val=(String) hibernateTemplate.save(studentEntity);
+				if(pk_Val.equals(studentEntity.getSid()))
+				{
+					status="Student Inserted Successfully";
+				}
+				else
+				{
+					status="Student Insertion Failure";
+				}
+			}
+			else
+			{
+				status="Student Existed Already.";			
+			}
+		} catch (Exception e) {
+			status="Student Insertion Failure";
+			e.printStackTrace();
+		}
+		return status;
+	}
+
+	@Override
+	public StudentEntity search(String sid) {
+		StudentEntity studentEntity=null;
+		try {
+			 studentEntity=(StudentEntity) hibernateTemplate.get(StudentEntity.class,sid);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return studentEntity;
+	}
+
+	@Override
+	public String delete(String sid) {
+		String status="";
+		try {
+			StudentEntity studentEntity=search(sid);
+			if(studentEntity==null)
+			{
+				status="Student not existed";
+			}
+			else
+			{
+				hibernateTemplate.delete(studentEntity);
+				status="Student Deleted Successfully";
+			}
+		} catch (Exception e) {
+			status="Student Deletion Failure";
+			e.printStackTrace();
+		}
+		return status;
+	}
+
+}
