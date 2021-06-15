@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+<bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+	<property name="mappings">
+		<props>
+			<prop key="welcome.do">shc</prop>
+			<prop key="list_countries.do">lacc</prop>
+		</props>
+	</property>
+</bean>
+
+<!-- Controllers Cfgs -->
+<bean id="shc" class="com.ashsoft.controller.ShowHomeController"/>
+<bean id="lacc" class="com.ashsoft.controller.CountriesController">
+	<constructor-arg name="service" ref="localeService"/>
+</bean>
+
+<!-- Service Cfgs -->
+<bean id="localeService" class="com.ashsoft.service.LocaleServiceImpl"/>
+
+<!-- View Resolver Cfgs -->
+<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+	<property name="prefix" value="/WEB-INF/pages/"/>
+	<property name="suffix" value=".jsp"/>
+</bean>
+
+</beans>
