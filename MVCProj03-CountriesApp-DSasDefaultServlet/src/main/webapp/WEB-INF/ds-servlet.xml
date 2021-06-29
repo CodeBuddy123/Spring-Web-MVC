@@ -8,6 +8,8 @@
 		<props>
 			<prop key="welcome">shc</prop>
 			<prop key="list_countries">lacc</prop>
+			<prop key="about_us">abtusc</prop>
+			<prop key="contact_us">contusc</prop>
 		</props>
 	</property>
 </bean>
@@ -17,6 +19,9 @@
 <bean id="lacc" class="com.ashsoft.controller.CountriesController">
 	<constructor-arg name="service" ref="localeService"/>
 </bean>
+
+<bean id="abtusc" class="com.ashsoft.controller.AboutUsController"/>
+<bean id="contusc" class="com.ashsoft.controller.ContactUsController"/>
 
 <!-- Service Cfgs -->
 <bean id="localeService" class="com.ashsoft.service.LocaleServiceImpl"/>

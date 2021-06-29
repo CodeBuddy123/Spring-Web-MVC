@@ -4,7 +4,7 @@
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/java"/>
-        <property name="context-root" value="MVCProj02-CountriesApp-XmlDriven"/>
         <property name="java-output-path" value="/MVCProj02-CountriesApp-XmlDriven/target/classes"/>
+        <property name="context-root" value="MVCProj03-CountriesApp-DSasDefaultServlet"/>
     </wb-module>
 </project-modules>
